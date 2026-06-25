@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div id="app" class="min-h-screen">
+        <!-- Login Page -->
+        <div id="login-page" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 dark:from-blue-900 dark:to-blue-950">
+            <div class="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">🏥 Hospital Management</h1>
+                    <p class="text-gray-600 dark:text-gray-400">Professional Healthcare Solution</p>
+                </div>
+                
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                        <input type="text" id="username" name="username" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white" placeholder="Enter username">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                        <input type="password" id="password" name="password" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white" placeholder="Enter password">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role</label>
+                        <select id="role" name="role" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                            <option value="">Select Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="receptionist">Receptionist</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-200">Login</button>
+                </form>
+                
+                <div id="login-error" class="mt-4 p-3 bg-red-100 text-red-800 rounded-lg hidden"></div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard" class="hidden">
+            <!-- Top Navigation Bar -->
+            <nav class="bg-white dark:bg-gray-800 shadow-md border-b border-gray-200 dark:border-gray-700">
+                <div class="px-6 py-4 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400">🏥 Hospital Management</h2>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <button id="theme-toggle" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+                            <span class="text-2xl">🌙</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <span id="user-role" class="text-sm font-semibold text-gray-700 dark:text-gray-300"></span>
+                            <button id="logout-btn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Sidebar and Content -->
+            <div class="flex">
+                <!-- Sidebar -->
+                <aside id="sidebar" class="w-64 bg-gray-800 dark:bg-gray-900 text-white h-screen overflow-y-auto fixed left-0 top-16 z-40">
+                    <nav class="p-4 space-y-2">
+                        <a href="#" onclick="showSection('dashboard-stats')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">📊 Dashboard</a>
+                        <a href="#" onclick="showSection('patients')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">👥 Patients</a>
+                        <a href="#" onclick="showSection('doctors')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">👨‍⚕️ Doctors</a>
+                        <a href="#" onclick="showSection('appointments')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">📅 Appointments</a>
+                        <a href="#" onclick="showSection('tokens')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">🎫 Token System</a>
+                        <a href="#" onclick="showSection('rooms')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">🛏️ Rooms & Beds</a>
+                        <a href="#" onclick="showSection('billing')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">💳 Billing</a>
+                        <a href="#" onclick="showSection('pharmacy')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">💊 Pharmacy</a>
+                        <a href="#" onclick="showSection('laboratory')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">🔬 Laboratory</a>
+                        <a href="#" onclick="showSection('prescriptions')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">📝 Prescriptions</a>
+                        <a href="#" onclick="showSection('staff')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">👔 Staff</a>
+                        <a href="#" onclick="showSection('reports')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">📈 Reports</a>
+                        <a href="#" onclick="showSection('settings')" class="nav-link px-4 py-3 rounded-lg hover:bg-gray-700 transition">⚙️ Settings</a>
+                    </nav>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="ml-64 flex-1 p-6 mt-16">
+                    <!-- Dashboard Stats Section -->
+                    <div id="dashboard-stats" class="space-y-6">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+                        
+                        <!-- Stats Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer" onclick="showSection('patients')">
+                                <div class="text-gray-600 dark:text-gray-400 text-sm font-semibold">Total Patients</div>
+                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2" id="total-patients">0</div>
+                                <div class="text-xs text-gray-500 mt-2">Active patients</div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer" onclick="showSection('doctors')">
+                                <div class="text-gray-600 dark:text-gray-400 text-sm font-semibold">Total Doctors</div>
+                                <div class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2" id="total-doctors">0</div>
+                                <div class="text-xs text-gray-500 mt-2">Registered doctors</div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer" onclick="showSection('staff')">
+                                <div class="text-gray-600 dark:text-gray-400 text-sm font-semibold">Total Staff</div>
+                                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2" id="total-staff">0</div>
+                                <div class="text-xs text-gray-500 mt-2">Active staff members</div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer" onclick="showSection('billing')">
+                                <div class="text-gray-600 dark:text-gray-400 text-sm font-semibold">Total Revenue</div>
+                                <div class="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2" id="total-revenue">$0</div>
+                                <div class="text-xs text-gray-500 mt-2">This month</div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Appointments This Week</h3>
+                                <canvas id="appointmentsChart"></canvas>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Revenue Trend</h3>
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patients Section -->
+                    <div id="patients" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Patient Management</h1>
+                            <button onclick="showModal('add-patient-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Patient</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="mb-4 flex gap-4">
+                                <input type="text" id="search-patient" placeholder="Search patients..." class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                                <button onclick="searchPatients()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">Search</button>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Patient ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Phone</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Doctor</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="patients-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctors Section -->
+                    <div id="doctors" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Doctor Management</h1>
+                            <button onclick="showModal('add-doctor-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Doctor</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="mb-4 flex gap-4">
+                                <input type="text" id="search-doctor" placeholder="Search doctors..." class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                                <button onclick="searchDoctors()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">Search</button>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Doctor ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Specialization</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Experience</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="doctors-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointments Section -->
+                    <div id="appointments" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Appointment Management</h1>
+                            <button onclick="showModal('add-appointment-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Book Appointment</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Appointment ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Patient</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Doctor</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Date & Time</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="appointments-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Token System Section -->
+                    <div id="tokens" class="hidden space-y-6">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Live Token System</h1>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-8 rounded-lg shadow-lg">
+                                <div class="text-sm opacity-80">Current Token</div>
+                                <div class="text-5xl font-bold mt-4" id="current-token">--</div>
+                                <div class="text-sm opacity-80 mt-4">Patient: <span id="current-patient">--</span></div>
+                                <div class="text-sm opacity-80">Doctor: <span id="current-doctor">--</span></div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-green-500 to-green-700 text-white p-8 rounded-lg shadow-lg">
+                                <div class="text-sm opacity-80">Next Token</div>
+                                <div class="text-5xl font-bold mt-4" id="next-token">--</div>
+                                <div class="text-sm opacity-80 mt-4" id="waiting-count">0 waiting</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Waiting Queue</h3>
+                            <div class="space-y-2" id="waiting-queue">
+                                <div class="text-center text-gray-500 dark:text-gray-400">Loading queue...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rooms Section -->
+                    <div id="rooms" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Room & Bed Management</h1>
+                            <button onclick="showModal('add-room-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Room</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="rooms-grid">
+                                <div class="text-center text-gray-500 dark:text-gray-400 col-span-3">Loading rooms...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Section -->
+                    <div id="billing" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Billing Management</h1>
+                            <button onclick="showModal('add-bill-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Create Bill</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Bill ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Patient</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Amount</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Date</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bills-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pharmacy Section -->
+                    <div id="pharmacy" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Pharmacy Management</h1>
+                            <button onclick="showModal('add-medicine-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Medicine</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Medicine ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Stock</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Min Level</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Price</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medicines-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="7" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laboratory Section -->
+                    <div id="laboratory" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Laboratory Management</h1>
+                            <button onclick="showModal('add-test-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Test</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Test ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Patient</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Test Type</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Date</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tests-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prescriptions Section -->
+                    <div id="prescriptions" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Prescription Management</h1>
+                            <button onclick="showModal('add-prescription-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Prescription</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Prescription ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Patient</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Doctor</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Date</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Follow-up</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="prescriptions-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Staff Section -->
+                    <div id="staff" class="hidden space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Staff Management</h1>
+                            <button onclick="showModal('add-staff-modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">+ Add Staff</button>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Staff ID</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Designation</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Department</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                                            <th class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="staff-table" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reports Section -->
+                    <div id="reports" class="hidden space-y-6">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Reports</h1>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <button onclick="generateReport('daily')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                📋 Daily Report
+                            </button>
+                            <button onclick="generateReport('monthly')" class="bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                📊 Monthly Report
+                            </button>
+                            <button onclick="generateReport('revenue')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                💰 Revenue Report
+                            </button>
+                            <button onclick="generateReport('patients')" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                👥 Patients Report
+                            </button>
+                            <button onclick="generateReport('doctors')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                👨‍⚕️ Doctors Report
+                            </button>
+                            <button onclick="exportData('excel')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-4 rounded-lg font-semibold transition">
+                                📥 Export Excel
+                            </button>
+                        </div>
+
+                        <div id="reports-output" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hidden">
+                            <h3 id="report-title" class="text-xl font-semibold text-gray-800 dark:text-white mb-4"></h3>
+                            <div id="report-content" class="text-gray-700 dark:text-gray-300"></div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="settings" class="hidden space-y-6">
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">System Settings</h1>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Hospital Name</label>
+                                <input type="text" id="hospital-name" placeholder="Enter hospital name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Contact Email</label>
+                                <input type="email" id="hospital-email" placeholder="Enter contact email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                                <input type="tel" id="hospital-phone" placeholder="Enter phone number" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <button onclick="saveSettings()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">Save Settings</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Patient Modal -->
+    <div id="add-patient-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add New Patient</h2>
+            <form id="add-patient-form" class="space-y-4">
+                <input type="text" id="patient-first-name" placeholder="First Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" id="patient-last-name" placeholder="Last Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="email" id="patient-email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="tel" id="patient-phone" placeholder="Phone" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="date" id="patient-dob" placeholder="Date of Birth" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <select id="patient-gender" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="patient-blood-group" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <input type="file" id="patient-image" accept="image/*" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add Patient</button>
+                    <button type="button" onclick="closeModal('add-patient-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Doctor Modal -->
+    <div id="add-doctor-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add New Doctor</h2>
+            <form id="add-doctor-form" class="space-y-4">
+                <input type="text" id="doctor-first-name" placeholder="First Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" id="doctor-last-name" placeholder="Last Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="email" id="doctor-email" placeholder="Email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="tel" id="doctor-phone" placeholder="Phone" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" id="doctor-specialization" placeholder="Specialization" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" id="doctor-qualification" placeholder="Qualification" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" id="doctor-experience" placeholder="Experience (years)" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" id="doctor-room" placeholder="Room Number" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" id="doctor-charge" placeholder="Consultation Charge" step="0.01" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="file" id="doctor-image" accept="image/*" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add Doctor</button>
+                    <button type="button" onclick="closeModal('add-doctor-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Appointment Modal -->
+    <div id="add-appointment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Book Appointment</h2>
+            <form id="add-appointment-form" class="space-y-4">
+                <select id="appointment-patient" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Patient</option>
+                </select>
+                <select id="appointment-doctor" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Doctor</option>
+                </select>
+                <input type="date" id="appointment-date" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="time" id="appointment-time" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <textarea id="appointment-notes" placeholder="Notes" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white"></textarea>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Book</button>
+                    <button type="button" onclick="closeModal('add-appointment-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Placeholder Modals for Other Features -->
+    <div id="add-room-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add New Room</h2>
+            <form id="add-room-form" class="space-y-4">
+                <input type="text" placeholder="Room Number" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Room Type</option>
+                    <option value="general">General</option>
+                    <option value="semi-private">Semi-Private</option>
+                    <option value="private">Private</option>
+                    <option value="icu">ICU</option>
+                </select>
+                <input type="number" placeholder="Number of Beds" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" placeholder="Charge per Day" step="0.01" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add Room</button>
+                    <button type="button" onclick="closeModal('add-room-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-bill-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Create Bill</h2>
+            <form id="add-bill-form" class="space-y-4">
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Patient</option>
+                </select>
+                <input type="number" placeholder="Total Amount" step="0.01" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" placeholder="Discount" step="0.01" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Create</button>
+                    <button type="button" onclick="closeModal('add-bill-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-medicine-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add Medicine</h2>
+            <form id="add-medicine-form" class="space-y-4">
+                <input type="text" placeholder="Medicine Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" placeholder="Manufacturer" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" placeholder="Quantity" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="number" placeholder="Price" step="0.01" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add</button>
+                    <button type="button" onclick="closeModal('add-medicine-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-test-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add Lab Test</h2>
+            <form id="add-test-form" class="space-y-4">
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Patient</option>
+                </select>
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Test Type</option>
+                    <option value="blood">Blood Test</option>
+                    <option value="xray">X-Ray</option>
+                    <option value="mri">MRI</option>
+                    <option value="ct">CT Scan</option>
+                </select>
+                <input type="date" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add</button>
+                    <button type="button" onclick="closeModal('add-test-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-prescription-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add Prescription</h2>
+            <form id="add-prescription-form" class="space-y-4">
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Patient</option>
+                </select>
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Doctor</option>
+                </select>
+                <textarea placeholder="Notes" rows="3" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white"></textarea>
+                <input type="date" placeholder="Follow-up Date" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add</button>
+                    <button type="button" onclick="closeModal('add-prescription-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-staff-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add Staff</h2>
+            <form id="add-staff-form" class="space-y-4">
+                <input type="text" placeholder="First Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="text" placeholder="Last Name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="email" placeholder="Email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <input type="tel" placeholder="Phone" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                <select required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dark:bg-gray-700 dark:text-white">
+                    <option value="">Select Designation</option>
+                    <option value="nurse">Nurse</option>
+                    <option value="receptionist">Receptionist</option>
+                    <option value="lab_technician">Lab Technician</option>
+                    <option value="pharmacist">Pharmacist</option>
+                    <option value="cleaner">Cleaner</option>
+                </select>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">Add</button>
+                    <button type="button" onclick="closeModal('add-staff-modal')" class="flex-1 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/patients.js"></script>
+    <script src="js/doctors.js"></script>
+    <script src="js/appointments.js"></script>
+    <script src="js/token-system.js"></script>
+    <script src="js/billing.js"></script>
+    <script src="js/pharmacy.js"></script>
+    <script src="js/laboratory.js"></script>
+    <script src="js/prescriptions.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/utils.js"></script>
+</body>
+</html>

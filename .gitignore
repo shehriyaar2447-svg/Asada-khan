@@ -1,0 +1,43 @@
+# Build files
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.out
+build/
+dist/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Temp
+temp/
+tmp/
+*.tmp
+
+# OS
+Thumbs.db
+.DS_Store
